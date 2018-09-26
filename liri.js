@@ -1,9 +1,17 @@
+require('dotenv').config();
 var Spotify = require('node-spotify-api');
+var Twitter = require('twitter');
+var client = new Twitter({
+    consumer_key: process.env.TWITTER_CONSUMER_KEY,
+    consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+    access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
+    access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
+});
 var fs = require('fs');
-// var spotify = new Spotify({
-//     id: '',
-//     secret: ''
-// });
+var spotify = new Spotify({
+    id: process.env.SPOTIFY_CLIENT_ID,
+    secret: process.env.SPOTIFY_CLIENT_SECRET
+});
 var request = require('request');
 
 //Get input fromt he user and store ina  variable
@@ -19,7 +27,7 @@ function commandHandler(command, data) {
     //Process the input provided to determine if it is a valid command
     if (command === 'get-tweets') {
         console.log('getting tweets');
-
+        getTweets();
         //We need t write a functoin that gets 20 tweetss
     } else if (command === 'movie-this') {
         console.log('getting movies');
@@ -52,6 +60,23 @@ function movieThis(searchCrit) {
 
     });
 }
+
+function getTweets() {
+    var params = { screen_name: 'nodejs', count: 5 };
+    client.get('statuses/user_timeline', params, function(error, tweets, response) {
+        if (!error) {
+            for (var index = 0; index < tweets.length; index++) {
+                console.log('Tweeted By: ' + tweets[index].user.screen_name);
+                console.log('Tweet text: ' + tweets[index].text);
+                console.log('Tweeted On: ' + tweets[index].created_at);
+            }
+
+
+
+
+        }
+    });
+};
 
 //If it is a valid command we need to do what that comman should do
 
