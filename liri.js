@@ -51,7 +51,6 @@ commandHandler(userinput, updata);
 function movieThis(searchCrit) {
     request('http://www.omdbapi.com/?apikey=trilogy&s=' + searchCrit, function(error, response, body) {
         if (!error) {
-            console.log('body:', JSON.parse(response.body).Search[0]);
             //Next step is too console log out neatly all the data they ahve askled for in the instructions
         }
 
